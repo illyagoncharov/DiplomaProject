@@ -1,0 +1,72 @@
+{% extends "mainapp/base.html" %}
+{%block content%}
+
+
+
+
+<!--      <form method="post"    style=" margin: 1% 40% 5% 40%;">-->
+
+<!--      {% csrf_token %}-->
+
+<!--          <p> {{ form.title }}</p>-->
+
+<!--          <p> {{ form.task }}</p>-->
+
+<!--          {% if user.is_superuser%}-->
+<!--         <div class="col-auto my-1" style="margin:10px;">-->
+<!--             <label class="mr-sm-2">Performer:</label>-->
+
+<!--             {{form.performer}}-->
+<!--        </div>-->
+<!--        {%else %}-->
+<!--        <input class="form-control form-control-sm" type="text" name=performer value='{{user.id}}' style="display:none;" >-->
+<!--        {%endif%}-->
+
+<!--        <input type="submit" value="Create" >-->
+
+
+<!--            </form>-->
+
+
+
+
+
+<!--<div class="collapse" id="collapseExample{{card.id}}">-->
+   <div class="card card-body" >
+    <form method="POST"  style=" margin: 1% 40% 5% 40%;">
+                     {% csrf_token %}
+        <h4>Card create form</h4>
+
+        <label for="">Title:</label>
+<!--        <p> {{ form.title }}</p>-->
+        <input  class="form-control form-control-sm" type="text" name='title' >
+
+
+    <div class="form-group">
+        <label for="">Task:</label>
+
+        <div class="input-group">
+  <div class="input-group-prepend">
+    </div>
+  <textarea class="form-control form-control-sm" name="task" aria-label="With textarea"> </textarea>
+</div>
+<!--        <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="task" rows="3">-->
+<!--            {{card.task}}-->
+<!--        </textarea>-->
+    </div>
+        {% if user.is_superuser%}
+         <div class="col-auto my-1" style="margin:10px;">
+             <label class="mr-sm-2">Performer:</label>
+
+             {{form.performer}}
+        </div>
+        {%elif not user.is_superuser %}
+        <p>Performer: {{user}}</p>
+        <input class="form-control form-control-sm" type="text" name='performer' value='{{user.id}}' style="display:none;" >
+        {%endif%}
+
+        <p></p>
+        <button type="submit" class="btn btn-sm btn-warning me-2">Save</button>
+</form>
+<!--   </div>-->
+{% endblock %}

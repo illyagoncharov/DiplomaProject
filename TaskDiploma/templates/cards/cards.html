@@ -1,0 +1,66 @@
+{% extends "mainapp/base.html" %}
+{%block content%}
+<section class="vh-100" style="background-color: #eee;">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center ">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+
+{% for status in status_list%}
+
+    <div class="col">
+        <div class="card" style=" ">
+         <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">STATUS:  {{status}} </h5>
+                    <table class="table" style="font-size: x-small;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Creator</th>
+                                <th scope="col">Task</th>
+                                <th scope="col">Performer</th>
+                                 <th scope="col">DATE</th>
+                                 <th scope="col">Date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+
+                    <tbody>
+                    {% for card in object_list %}
+
+                        {%if card.status == status%}
+
+                            <tr>
+                                <td>{{card.user}}</td>
+                                <td>{{card.task}}</td>
+                                <td>{{card.performer}}</td>
+                                <td>{{card.date_create}}</td>
+                                <td>{{card.date_joined}}</td>
+                                <td>{{card.status}}</td>
+                                <td>{{card.id}}</td>
+
+                            {%if card.status == "ordered"%}
+                                <td> <a href='{% url "cart:cart_return" cart.id%}' >Return</a></td>
+                            {%endif%}
+
+                            {%if card.status == 'return'%}
+                                <td> <p style="color: coral;">Waiting for confirmation</p></td>
+                            {%endif%}
+
+                            </tr>
+                        {%endif%}
+                    {% endfor %}
+                    </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+{%endfor%}
+
+</div>
+    </div>
+  </div>
+</section>
+{% endblock %}

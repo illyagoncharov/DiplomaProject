@@ -1,0 +1,41 @@
+<div class="collapse" id="collapseExample{{card.id}}">
+   <div class="card card-body" >
+    <form method="POST" action="{% url 'cards:cardedit' %}">
+                     {% csrf_token %}
+        <h4>Card edit form</h4>
+        <input class="form-control form-control-sm" type="text" name='card_id' value='{{card.id}}' style="display:none;" >
+        <label for="">Title:</label>
+        <input  class="form-control form-control-sm" type="text" name='title' value='{{card.title}}'>
+
+
+    <div class="form-group">
+        <label for="">Task:</label>
+
+        <div class="input-group">
+  <div class="input-group-prepend">
+    </div>
+  <textarea class="form-control form-control-sm" name="task" aria-label="With textarea">{{card.task}}</textarea>
+</div>
+<!--        <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" name="task" rows="3">-->
+<!--            {{card.task}}-->
+<!--        </textarea>-->
+    </div>
+        {% if user.is_superuser%}
+         <div class="col-auto my-1" style="margin:10px;">
+             <label class="mr-sm-2">Performer:</label>
+
+             {{form.performer}}
+        </div>
+        {%elif user == card.performer%}
+        <input class="form-control form-control-sm" type="text" name=performer value='{{card.performer.id}}' style="display:none;" >
+        {%endif%}
+
+        <p></p>
+        <button type="submit" class="btn btn-sm btn-warning me-2">Save</button>
+</form>
+   </div>
+
+
+
+</div>
+<p></p>

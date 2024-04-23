@@ -1,0 +1,210 @@
+{% extends "mainapp/base.html" %}
+{%block content%}
+<style class="cp-pen-styles">*:focus {
+  outline: 0;
+}
+
+body {
+  background: #0079BF;
+}
+
+h1 {
+  font-size: 1.3em;
+  color: white;
+  margin: 20px 10px 0;
+}
+
+.list-container {
+  display: flex;
+  flex: row nowrap;
+  align-items: flex-start;
+}
+
+.list {
+  background: #E2E4E6;
+}
+
+.list-dimension {
+  border-radius: 3px;
+  margin: 10px;
+  width: 300px;
+}
+
+.list-header {
+  margin: 10px 10px -10px;
+  padding: 0;
+  font-size: 1em;
+  font-weight: bold;
+  color: black;
+}
+
+.list-inner-scroll {
+  padding: 0;
+  list-style-type: none;
+  margin-top: 10px;
+  margin-bottom: 0;
+  max-height: 400px;
+  overflow: scroll;
+}
+
+.list-item {
+  background: white;
+  margin: 10px;
+  margin-bottom: 0;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.add-list-button {
+  padding: 10px;
+  background-color: #006BA9;
+  /* height: 19px; */
+  text-align: left;
+  font-size: 0.9em;
+  color: #B3D3E5;
+  border: none;
+  transition: background-color 0.3s;
+}
+.add-list-button:hover {
+  background-color: #005586;
+  cursor: pointer;
+}
+
+.add-card-button {
+  display: block;
+  font-size: 0.9em;
+  padding: 10px;
+  color: #8C8C8C;
+  border: none;
+  background-color: transparent;
+}
+.add-card-button:hover {
+  cursor: pointer;
+}
+
+.card-performer-name {
+    background-color: #ede17a;
+    }
+
+</style></head><body>
+
+<h1>TrelloUndercut </h1>
+    <div class="list-container" style="display: flex;
+  justify-content: center;">
+
+        {%for status in status_list%}
+
+            <div class="list list-dimension" style="width:320px;">
+                <h1 class="list-header" >{{status}}</h1>
+                <ul class="list-inner-scroll" style="max-height: 700px;" >
+
+                {% for card in object_list %}
+
+                    {%if card.status == status%}
+                        {% if user == card.performer %}
+                            <li class="list-item" style="font-size: 0.8rem; background-color:#4ab38c;" >
+                                <p>It`s your card</p>
+                                 <img
+              src="https://mdbootstrap.com/img/new/avatars/8.jpg"
+              alt=""
+              style="width: 45px; height: 45px "
+              class="rounded-circle"
+              />
+                                <p  style="text-decoration-line: underline;
+  text-decoration-color: yellow; text-decoration-thickness: 5px; font-weight: bolder;">Performer: {{card.performer}}, Card ID - {{card.id}}</p>
+
+                        {%else%}
+                            <li class="list-item" style="font-size: 0.8rem; background-color:azure;" >
+
+                                    <p style="text-decoration-line: underline; text-decoration-color: yellow; text-decoration-thickness: 2px;"> Performer: {{card.performer}}, Card ID - {{card.id}}</p>
+
+                        {% endif %}
+
+
+
+
+
+
+
+                        {% if user.is_superuser%}
+                            <div class="btn-group" role="group" aria-label="Third group">
+                                <form method="post" action="{% url 'cards:carddelete' card.id %}">
+                                 {% csrf_token %}
+
+                                     <button type="" class="btn btn-sm btn-outline-dark me-2" >Delete card</button>
+
+                                </form>
+                            </div>
+                        {%endif%}
+
+
+            <p></p>
+          Title: <p style="background-color:white;">{{card.title}} </p>
+
+          <div class="collapse" id="collapseTask{{card.id}}" >
+              Task:
+              <div class="card card-body" >
+
+          {{card.task}}
+               </div>
+        </div>
+            <p></p>
+          {% include 'cards/editcard.html' %}
+
+
+             <div class="btn-group" role="group" aria-label="Basic mixed styles example" style="display: flex;
+  justify-content: center;">
+
+            <form method="POST" action=" ">
+                     {% csrf_token %}
+                <input type="text" name="card_id" value="{{card.id}}" style="display:none;" >
+                 {% if status == "New"%}
+                <button type="button" class="btn btn-danger btn-sm" disabled>Previous</button>
+                 {%else%}
+                 <button type="submit" class="btn btn-danger btn-sm" value='back' name = 'nextstep'  >Previous</button>
+                 {%endif%}
+
+                {% if user.is_superuser or user == card.performer%}
+
+                <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample{{card.id}}" aria-expanded="false" aria-controls="collapseExample{{card.id}}">
+                Edit
+                </button>
+
+                {% endif%}
+
+                 <button type="button" class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#collapseTask{{card.id}}" aria-expanded="false" aria-controls="collapseTask{{card.id}}">View</button>
+                 {% if status != "Done"%}
+                    {%if status != "Ready" or user.is_superuser %}
+
+                    <button type="submit" class="btn btn-success btn-sm" value='next' name ='nextstep' >Next</button>
+                    {%else%}
+                     <button type="button" class="btn btn-success btn-sm" disabled>Next</button>
+                     {%endif%}
+
+                 {% else %}
+                    <button type="button" class="btn btn-success btn-sm" disabled>Next</button>
+
+                 {%endif%}
+
+
+
+
+            </form>
+                 </div>
+            {%block edit%}
+
+          {%endblock%}
+      </li>
+
+
+      {%endif%}
+
+      {% endfor %}
+    </li>
+    </ul>
+
+  </div>
+  {% endfor %}
+</div>
+</body>
+{% endblock %}
